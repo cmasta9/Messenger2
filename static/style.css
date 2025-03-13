@@ -1,0 +1,16 @@
+body{
+    background-color: #000000;
+    color: #eeee00;
+}
+
+div{
+    background-color: #008800;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.flash{
+    background-color: #880000;
+    width:fit-content;
+}

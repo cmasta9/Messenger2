@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}SocketIO Messenger{% endblock %}</title>
+        <link href="{{url_for('static',filename='style.css')}}" rel="stylesheet">
+    </head>
+    <body>
+        <h1>SocketIO Messenger</h1>
+        <nav>
+            {% if not g.user %}
+            <a href="{{url_for('auth.login')}}">Login</a>
+            <a href="{{url_for('auth.register')}}">Register</a>
+            {% else %}
+            <span>Logged in as: </span><span id="username">{{g.user}}</span>
+            <br>
+            <a href="{{url_for('auth.logout')}}">Logout</a>
+            {% endif %}
+        </nav>
+
+        <br>
+        <header>
+            {% block header %}
+            {% endblock %}
+        </header>
+        {% block content %}
+        {% endblock %}
+        {% for m in get_flashed_messages() %}
+        <div class="flash">{{m}}</div>
+        {% endfor %}
+        <br>
+        {% if g.user %}
+        <input type="text" id="tb" placeholder="Type a message here...">
+        <button id="send" onclick="sendMess()">Send</button>
+        <br>
+        {% endif %}
+        <br>
+        <div id="cont"></div>
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js"></script>
+        <script type="text/javascript">
+
+            if(document.getElementById('username').innerText != ''){
+                const socket = io.connect('ws://'+ document.domain + ':' + location.port);
+
+                socket.addEventListener('connect',()=>{
+                    socket.emit('clientConn',{un: 'un'});
+                });
+
+                socket.addEventListener('response',(e)=>{
+                    const elem = document.createElement('p');
+                    const js = JSON.parse(e);
+                    elem.innerText = `${js.user}: ${js.message}`;
+                    document.getElementById('cont').appendChild(elem);
+                });
+
+                socket.addEventListener('serverConn',()=>{
+                    console.log(`A client connected.`);
+                });
+
+                function sendMess(mess=document.getElementById('tb').value){
+                    socket.emit('message',JSON.stringify({'message': mess,'user': document.getElementById('username').innerText}));
+                }
+            }
+        </script>
+</html>
