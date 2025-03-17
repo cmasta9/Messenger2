@@ -7,8 +7,10 @@
 
 {% block content %}
 <form class="login" method="post">
-    <input type="text" name="un" placeholder="Username" required>
-    <input type="password" name="pw" placeholder="Password" required>
+    <input type="text" name="un" pattern="[\dA-Za-z]{2,40}" placeholder="Username (2-40 non-special characters)" style="width:42%;" required>
+    <br>
+    <input type="password" name="pw" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" placeholder="Password (must contain lowercase, uppercase, number, 8+ characters)" style="width:42%;" required>
+    <br>
     <input type="submit" value="Register">
 </form>
 {% endblock %}

@@ -13,8 +13,6 @@ def register():
 
         error = None
 
-        print('reg',un,pw)
-
         if not un or not pw:
             error = 'Username and password are required'
             return redirect(url_for('auth.register'))
@@ -39,7 +37,6 @@ def login():
         un = request.form['un']
         pw = request.form['pw']
 
-        print('login',un,pw)
         error = None
 
         if not un or not pw:
@@ -76,7 +73,6 @@ def logged():
 
 def getAuth(u,p):
     dic = mkDic()
-    print(dic)
     if u in dic.keys():
         if dic[u] == str(hashPass(p)):
             print('pass match')
@@ -99,7 +95,6 @@ def mkDic(f=fn):
     uz = {}
     fl = open(f,'r')
     l = fl.readline()
-    print('rl',l)
     while l is not '':
         l = l.strip().split(',')
         uz[l[0]] = l[1]
@@ -109,7 +104,6 @@ def mkDic(f=fn):
 
 def appendDic(u,p,f=fn):
     uz = mkDic(f)
-    print(uz)
     if u not in uz.keys():
         fl = open(f,'a')
         fl.write(f'{u},{p}\n')
